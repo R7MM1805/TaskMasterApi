@@ -1,4 +1,6 @@
-﻿namespace TaskMasterApi.Models
+﻿using TaskMasterApi.Services;
+
+namespace TaskMasterApi.Models
 {
     public class TaskModel
     {
@@ -8,5 +10,13 @@
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
+
+        public static TaskModel MappingTask(RegisterTaskModel taskModel) =>
+            new()
+            {
+                ID = TaskDataStore.Current.Tasks.Max(x => x.ID) + 1,
+                Title = taskModel.Title,
+                Description = taskModel.Description
+            };
     }
 }

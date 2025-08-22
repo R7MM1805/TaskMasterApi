@@ -11,10 +11,17 @@ namespace TaskMasterApi.Controllers
         [HttpGet("GetTask")]
         public ActionResult<List<TaskModel>> GetTask() => Ok(TaskDataStore.Current.Tasks);
         [HttpGet("GetTaskByID")]
-        public ActionResult<TaskModel> GetTaskByID(int id)
+        public ActionResult<TaskModel> GetTaskByID([FromQuery] int id)
         {
             TaskModel? task = TaskDataStore.Current.Tasks.FirstOrDefault(x => x.ID == id);
             return task is null ? NotFound("La tarea no fue encontrada") : Ok(task);
+        }
+        [HttpPost("RegisterTask")]
+        public ActionResult<TaskModel> RegisterTask([FromBody] RegisterTaskModel taskModel)
+        {
+            TaskModel newTask = TaskModel.MappingTask(taskModel);
+            TaskDataStore.Current.Tasks.Add(newTask);
+            return Ok(newTask);
         }
     }
 }
