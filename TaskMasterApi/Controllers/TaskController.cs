@@ -34,5 +34,13 @@ namespace TaskMasterApi.Controllers
             task.UpdatedAt = DateTime.Now;
             return Ok(task);
         }
+        [HttpDelete("DeleteTask")]
+        public ActionResult DeleteTask([FromQuery] int id)
+        {
+            TaskModel? task = TaskDataStore.Current.Tasks.FirstOrDefault(x => x.ID == id);
+            if (task is null) return NotFound("La tarea no fue encontrada");
+            TaskDataStore.Current.Tasks.Remove(task);
+            return NoContent();
+        }
     }
 }
