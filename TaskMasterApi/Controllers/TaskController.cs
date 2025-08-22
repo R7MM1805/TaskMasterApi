@@ -23,5 +23,16 @@ namespace TaskMasterApi.Controllers
             TaskDataStore.Current.Tasks.Add(newTask);
             return Ok(newTask);
         }
+        [HttpPut("UpdateTask")]
+        public ActionResult<TaskModel> UpdateTask([FromBody] RegisterTaskModel taskModel, [FromQuery] int id)
+        {
+            TaskModel? task = TaskDataStore.Current.Tasks.FirstOrDefault(x => x.ID == id);
+            if (task is null) return NotFound("La tarea no fue encontrada");
+            task.Title = taskModel.Title;
+            task.Description = taskModel.Description;
+            task.IsCompleted = taskModel.IsCompleted;
+            task.UpdatedAt = DateTime.Now;
+            return Ok(task);
+        }
     }
 }
